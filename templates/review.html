@@ -1,0 +1,146 @@
+{% extends "_base.html" %}
+
+{% set page_id = 'review' %}
+
+{% block content %}
+    <div class="large-2 columns">
+    </div>
+    <div class="large-8 columns">
+        <h3>Code Carrots: Attendee <b>Review</b> Form</h3>
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Surname</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.surname }}
+        </div>
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Name</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.name }}
+        </div>
+        <div class="small-4 columns">
+            <label for="right-label" class="right">E-mail</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.email }}
+        </div>
+        <div class="small-4 columns">
+
+            <label for="right-label" class="right">Birth Date</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.birth_date }}
+        </div>
+
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">City</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.city }}
+        </div>
+
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Description</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.description }}
+        </div>
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Riddle</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.riddle }}
+        </div>
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Can you cook
+                something</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.can_cook_something }}
+        </div>
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">I am a Human</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.notes }}
+        </div>
+
+<p>
+
+</p>
+
+    {% if reviewed_by %}
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Accepted</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.accepted }}
+        </div>
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Notes</label>
+        </div>
+        <div class="small-8 columns">
+            {{ attendee.notes }}
+        </div>
+
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Reviewed by</label>
+        </div>
+        <div class="small-8 columns">
+            {% for reviewer in reviewed_by %}
+                {{ reviewer }} : <b>{{ reviewed_by[reviewer] }}</b>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+
+
+        <form action="" method="post" name="order">
+            {{ form.crsf_token }}
+            {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                {% for error in field_errors %}
+                    <div data-alert class="alert-box alert radius">
+                        {{ error }}
+                        <a href="#" class="close">&times;</a>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Score</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.score }}
+            </div>
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Notes</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.notes }}
+            </div>
+     {% if current_user.is_poweruser() %}
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Accepted</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.accepted }}
+            </div>
+        {% endif %}
+        <input type="submit" value="register" class="button right">
+        </form>
+    </div>
+    <div class="large-2 columns">
+    </div>
+
+{% endblock %}

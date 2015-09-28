@@ -1,0 +1,45 @@
+{% extends "_base.html" %}
+
+{% set page_id = 'overview' %}
+
+{% block content %}
+    <div class="large-6 columns">
+
+    <div class="large-6 columns">
+        <h3>Overview</h3>
+
+        <table>
+        <thead>
+        <tr>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Accepted</th>
+            <th>Review</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for attendee in attendees %}
+
+            <tr>
+
+                <td>{{ attendee.surname  }}</td>
+                <td>{{ attendee.name }}</td>
+                <td>{{ attendee.score }}</td>
+                <td>{{ attendee.accepted }}</td>
+                <td>
+                    <a href="{{ url_for('review', uid=attendee.id) }}">Review</a>
+                </td>
+            <td></td>
+
+            </tr>
+
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+    </div>
+
+
+{% endblock %}

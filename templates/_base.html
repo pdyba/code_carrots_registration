@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<head>
+    <title>Code Carots Poznań</title>
+
+    <meta name="author" content="Piotr Dyba"/>
+    <link href="{{ url_for('static', filename='css/normalize.css') }}"
+          media="all" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ url_for('static', filename='css/foundation.css') }}"
+          media="all" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='css/general_foundicons.css') }}"
+          media="all" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='css/sweet-alert.css') }}"
+          media="all" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='css/my_style.css') }}"
+          media="all" rel="stylesheet" type="text/css"/>
+
+    <script src="{{ url_for('static', filename='js/vendor/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery-ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sweet-alert.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
+
+
+    <link rel="shortcut icon"
+          href="{{ url_for('static', filename='img/favicon.png') }}"
+          type="image/x-icon">
+
+
+    <div id="main">
+        <div class="large-12 columns">
+        <h1>Code Carrots: Poznań 1. 28-29.11.2015</h1>
+            <ul class="title-area">
+
+
+                    <nav class="top-bar" data-topbar role="navigation">
+
+                        <section class="top-bar-section">
+                             {% if current_user and current_user.is_authenticated %}
+                         <ul class="right">
+                                <li class="hi_user">
+                                    <a>  {{ current_user.username }} </a>
+                                </li>
+
+                            </ul>
+                                {% else %}
+                                 <ul class="right">
+                                <li
+                                    class="right" ><a
+                                        href="{{ url_for('login') }}">Login</a>
+                                </li>
+                                 </ul>
+                            {% endif %}
+                            <ul class="left">
+                                <li {% if page_id == 'register' %}
+                                    class="active" {% endif %}><a
+                                        href="{{ url_for('register') }}">Register</a>
+                                </li>
+                                <li {% if page_id == 'Info' %}
+                                    class="active" {% endif %}><a
+                                        href="{{ url_for('info') }}">Info</a>
+                                </li>
+
+                            {% if current_user and current_user.is_authenticated %}
+                                <li {% if page_id == 'overview' %}
+                                    class="active" {% endif %}><a
+                                        href="{{ url_for('overview') }}">Overview</a>
+                                </li>
+                               {% endif %}
+                            </ul>
+                        </section>
+                    </nav>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="large-12 columns">
+
+        <div id="messages">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div data-alert class="alert-box success radius">
+                        {% for message in messages %}
+                            <li>{{ message|urlize(30) }}</li>
+                        {% endfor %}
+                        <a href="#" class="close">&times;</a>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+        </div>
+
+    </div>
+
+</head>
+
+<body>
+<div class="row">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+
+
+<div class="large-12 columns small-text-right">
+
+    <hr>
+    <h6>Created by <a href="http://dyba.com.pl/">Piotr Dyba</a> in 2015</h6>
+</div>
+
+</html>

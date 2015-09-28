@@ -1,0 +1,109 @@
+{% extends "_base.html" %}
+
+{% set page_id = 'register' %}
+
+{% block content %}
+    <div class="large-2 columns">
+    </div>
+    <div class="large-8 columns">
+        <h3>Code Carrots: Attendee Registration Form</h3>
+
+        <form action="" method="post" name="order">
+            {{ form.crsf_token }}
+            {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                {% for error in field_errors %}
+                    <div data-alert class="alert-box alert radius">
+                        {{ error }}
+                        <a href="#" class="close">&times;</a>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Name</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.name }}
+            </div>
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Surname</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.surname }}
+            </div>
+            <div class="small-4 columns">
+                <label for="right-label" class="right">E-mail</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.email }}
+            </div>
+            <div class="small-4 columns">
+
+                <label for="right-label" class="right">Birth Date</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.birth_date }}
+            </div>
+
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">City</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.city }}
+            </div>
+
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Description</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.description }}
+            </div>
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Riddle</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.riddle }}
+            </div>
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Can you cook
+                    something</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.can_cook_something }}
+            </div>
+
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">I Accept rules</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.accepted_rules }}
+            </div>
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">I am a Human</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.i_am_human }}
+            </div>
+
+
+            <input type="submit" value="register" class="button right">
+
+        </form>
+    </div>
+    <div class="large-2 columns">
+    </div>
+
+    <script>
+        $(function () {
+            $("#birth_date").datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        });
+    </script>
+{% endblock %}
