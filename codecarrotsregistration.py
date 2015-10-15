@@ -36,11 +36,11 @@ def make_app(debug=False):
     Create and configure Flask app.
     """
 
-    # cfg = path.join(
-    #     path.dirname(path.realpath(__file__)),
-    #     "deploy.cfg",
-    # )
-    # app.config.from_pyfile(cfg)
+    cfg = path.join(
+        path.dirname(path.realpath(__file__)),
+        "deploy.cfg",
+    )
+    app.config.from_pyfile(cfg)
     app.debug = True
     app.static_path = path.join(path.abspath(__file__), 'static')
 
@@ -55,24 +55,28 @@ def make_app(debug=False):
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/test.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = "IT_IS_A_SECRET"
 db = SQLAlchemy()
 db.app = app
 db.init_app(app)
 admin = Admin(app)
-mail = Mail()
+mail = Mail(app)
 lm = LoginManager()
 lm.init_app(app)
 bcrypt = Bcrypt()
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/test.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = "IT_IS_A_SECRET"
 
 if __name__ == '__main__':
     app = make_app(debug=True)
-    if not User.query.first():
+
+    from models import User
+    try:
+        User.query.first()
+    except:
         from init_db import db_start
         db_start()
     from views import *
+    mail.init_app(app)
     app.run(debug=True)
 

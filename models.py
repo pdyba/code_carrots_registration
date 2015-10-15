@@ -56,11 +56,14 @@ class Attendee(db.Model):
     surname = Column(Unicode(50))
     email = Column(String(80), unique=True)
     birth_date = Column(DateTime)
-    description = Column(String(5000))
-    riddle = Column(String(5000))
+    description = Column(String(1000))
+    app_idea = Column(String(1000))
     accepted_rules = Column(Boolean)
     can_cook_something = Column(String(50))
     city = Column(String(50))
+    experience = Column(String(150))
+    tshirt = Column(String(50))
+    operating_system = Column(String(50))
 
     # meta data
     create_date = Column(DateTime, default=datetime.utcnow)
@@ -68,3 +71,5 @@ class Attendee(db.Model):
     reviewed_by = Column(String(500))
     accepted = Column(Boolean, default=False)
     notes = Column(String(5000))
+    ssh_yes = Column(String(500))
+    ssh_no = Column(String(500))

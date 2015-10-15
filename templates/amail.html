@@ -1,0 +1,47 @@
+{% extends "_base.html" %}
+
+{% set page_id = 'amail' %}
+
+{% block content %}
+
+    <div class="large-10 columns">
+        <h3>E-mail All</h3>
+
+        <form action="" method="post" name="order">
+            {{ form.crsf_token }}
+            {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                {% for error in field_errors %}
+                    <div data-alert class="alert-box alert radius">
+                        {{ error }}
+                        <a href="#" class="close">&times;</a>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Adresaci (grupa docelowa) </label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.receivers }}
+            </div>
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Temat</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.subject }}
+            </div>
+
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Treść</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.body }}
+            </div>
+
+            <input type="submit" value="login" class="button right">
+        </form>
+    </div>
+
+{% endblock %}

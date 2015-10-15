@@ -6,7 +6,7 @@
     <div class="large-2 columns">
     </div>
     <div class="large-8 columns">
-        <h3>Code Carrots: Attendee <b>Review</b> Form</h3>
+        <h3>Attendee:</h3>
 
         <div class="small-4 columns">
             <label for="right-label" class="right">Surname</label>
@@ -52,10 +52,10 @@
         </div>
 
         <div class="small-4 columns">
-            <label for="right-label" class="right">Riddle</label>
+            <label for="right-label" class="right">App Idea</label>
         </div>
         <div class="small-8 columns">
-            {{ attendee.riddle }}
+            {{ attendee.app_idea }}
         </div>
 
         <div class="small-4 columns">
@@ -66,16 +66,37 @@
             {{ attendee.can_cook_something }}
         </div>
 
-        <div class="small-4 columns">
-            <label for="right-label" class="right">I am a Human</label>
+    <div class="small-4 columns">
+            <label for="right-label" class="right">T-shirt</label>
         </div>
         <div class="small-8 columns">
-            {{ attendee.notes }}
+            {{ attendee.tshirt }}
         </div>
 
-<p>
 
-</p>
+        <div class="small-4 columns">
+            <label for="right-label" class="right">Experience</label>
+        </div>
+        <div class="small-8 columns">
+        <table>
+            <thead>
+            <tr>
+                <th>Język</th>
+                <th>Poziom</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for exp in attendee.experience %}
+                <tr>
+                    <td>{{ exp }} </td>
+                    <td>{{ attendee.experience[exp] }} / 3</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+
 
     {% if reviewed_by %}
         <div class="small-4 columns">
@@ -103,7 +124,9 @@
     {% endif %}
 
 
-
+<br>
+<h3>Review Form:</h3>
+<br>
         <form action="" method="post" name="order">
             {{ form.crsf_token }}
             {% for field_name, field_errors in form.errors|dictsort if field_errors %}
@@ -137,7 +160,7 @@
                 {{ form.accepted }}
             </div>
         {% endif %}
-        <input type="submit" value="register" class="button right">
+        <input type="submit" value="save" class="button right">
         </form>
     </div>
     <div class="large-2 columns">

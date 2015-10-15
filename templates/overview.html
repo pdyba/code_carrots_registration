@@ -1,41 +1,63 @@
 {% extends "_base.html" %}
 
-{% set page_id = 'overview' %}
+{% set page_id = current_page_id %}
 
 {% block content %}
+    <dl class="sub-nav">
+    <dt>Filters</dt>
+
+    <dd {% if page_id == 'overview' %}
+        class="active" {% endif %}><a
+            href="{{ url_for('overview', user_filter='notrated') }}">Not rated</a>
+    </dd>
+    <dd {% if page_id == 'overview_top100' %}
+        class="active" {% endif %}><a
+            href="{{ url_for('overview',  user_filter='top100')}}">TOP 100</a>
+    </dd>
+    <dd {% if page_id == 'overview_accepted' %}
+        class="active" {% endif %}><a
+            href="{{ url_for('overview', user_filter='accepted')}}">Accepted</a></dd>
+    <dd {% if page_id == 'overview_all' %}
+        class="active" {% endif %}><a
+            href="{{ url_for('overview') }}">All</a>
+    </dd>
+
+
+
+
+</dl>
+
     <div class="large-6 columns">
 
     <div class="large-6 columns">
         <h3>Overview</h3>
 
         <table>
-        <thead>
-        <tr>
-            <th>Surname</th>
-            <th>Name</th>
-            <th>Score</th>
-            <th>Accepted</th>
-            <th>Review</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for attendee in attendees %}
-
+            <thead>
             <tr>
-
-                <td>{{ attendee.surname  }}</td>
-                <td>{{ attendee.name }}</td>
-                <td>{{ attendee.score }}</td>
-                <td>{{ attendee.accepted }}</td>
-                <td>
-                    <a href="{{ url_for('review', uid=attendee.id) }}">Review</a>
-                </td>
-            <td></td>
-
+                <th>Surname</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Accepted</th>
+                <th>Review</th>
             </tr>
+            </thead>
+            <tbody>
+            {% for attendee in attendees %}
+                <tr>
+                    <td>{{ attendee.surname }}</td>
+                    <td>{{ attendee.name }}</td>
+                    <td>{{ attendee.score }}</td>
+                    <td>{{ attendee.accepted }}</td>
+                    <td>
+                        <a href="{{ url_for('review', uid=attendee.id) }}">Review</a>
+                    </td>
 
-        {% endfor %}
-        </tbody>
+
+                </tr>
+
+            {% endfor %}
+            </tbody>
         </table>
     </div>
 

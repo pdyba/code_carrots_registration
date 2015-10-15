@@ -24,53 +24,59 @@
 
 
     <link rel="shortcut icon"
-          href="{{ url_for('static', filename='img/favicon.png') }}"
+          href="{{ url_for('static', filename='img/favicon.ico') }}"
           type="image/x-icon">
 
 
     <div id="main">
         <div class="large-12 columns">
-        <h1>Code Carrots: Poznań 1. 28-29.11.2015</h1>
+
             <ul class="title-area">
 
+                <img src="{{ url_for('static', filename='img/logo.png') }}"
+                     alt="Code Carrots Registration" style="width: 18%">
+                <nav class="top-bar" data-topbar role="navigation">
 
-                    <nav class="top-bar" data-topbar role="navigation">
+                    <section class="top-bar-section">
 
-                        <section class="top-bar-section">
-                             {% if current_user and current_user.is_authenticated %}
-                         <ul class="right">
+                        {% if current_user and current_user.is_authenticated %}
+                            <ul class="right">
                                 <li class="hi_user">
                                     <a>  {{ current_user.username }} </a>
                                 </li>
 
                             </ul>
-                                {% else %}
-                                 <ul class="right">
+                        {% else %}
+                            <ul class="right">
                                 <li
-                                    class="right" ><a
+                                        class="right"><a
                                         href="{{ url_for('login') }}">Login</a>
                                 </li>
-                                 </ul>
-                            {% endif %}
-                            <ul class="left">
-                                <li {% if page_id == 'register' %}
-                                    class="active" {% endif %}><a
-                                        href="{{ url_for('register') }}">Register</a>
-                                </li>
-                                <li {% if page_id == 'Info' %}
-                                    class="active" {% endif %}><a
-                                        href="{{ url_for('info') }}">Info</a>
-                                </li>
-
+                            </ul>
+                        {% endif %}
+                        <ul class="left">
+                            <li {% if page_id == 'Info' %}
+                                class="active" {% endif %}><a
+                                    href="{{ url_for('info') }}">Info</a>
+                            </li>
+                            <li {% if page_id == 'register' %}
+                                class="active" {% endif %}><a
+                                    href="{{ url_for('register') }}">Rejstracja</a>
+                            </li>
                             {% if current_user and current_user.is_authenticated %}
-                                <li {% if page_id == 'overview' %}
+                                <li {% if page_id.startswith('overview') %}
                                     class="active" {% endif %}><a
                                         href="{{ url_for('overview') }}">Overview</a>
                                 </li>
-                               {% endif %}
-                            </ul>
-                        </section>
-                    </nav>
+                            {% endif %}
+                        </li>
+                            <li {% if page_id == 'amail' %}
+                                class="active" {% endif %}><a
+                                    href="{{ url_for('amail') }}">A-mail</a>
+                            </li>
+                        </ul>
+                    </section>
+                </nav>
 
             </ul>
         </div>

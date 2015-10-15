@@ -6,7 +6,7 @@
     <div class="large-2 columns">
     </div>
     <div class="large-8 columns">
-        <h3>Code Carrots: Attendee Registration Form</h3>
+        <h3>Rejestracja uczestników / Attendee Registration</h3>
 
         <form action="" method="post" name="order">
             {{ form.crsf_token }}
@@ -19,15 +19,22 @@
                 {% endfor %}
             {% endfor %}
 
+
+            <h2 class="carrot">O TOBIE</h2>
+            Poniższe informacje są potrzebne, żeby się z Tobą skontaktować i
+            poinformować o wynikach rekrutacji.
+            <br>
+            <br>
+
             <div class="small-4 columns">
-                <label for="right-label" class="right">Name</label>
+                <label for="right-label" class="right">Imię</label>
             </div>
             <div class="small-8 columns">
                 {{ form.name }}
             </div>
 
             <div class="small-4 columns">
-                <label for="right-label" class="right">Surname</label>
+                <label for="right-label" class="right">Nazwisko</label>
             </div>
             <div class="small-8 columns">
                 {{ form.surname }}
@@ -40,7 +47,7 @@
             </div>
             <div class="small-4 columns">
 
-                <label for="right-label" class="right">Birth Date</label>
+                <label for="right-label" class="right">Data urodzenia</label>
             </div>
             <div class="small-8 columns">
                 {{ form.birth_date }}
@@ -48,29 +55,117 @@
 
 
             <div class="small-4 columns">
-                <label for="right-label" class="right">City</label>
+                <label for="right-label" class="right">Miasto</label>
             </div>
             <div class="small-8 columns">
                 {{ form.city }}
             </div>
 
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Telefon</label>
+            </div>
+
+
+            <div class="small-8 columns">
+                {{ form.telephone }}
+            </div>
+            <br>
+
+
+            <h2 class="carrot">MOTYWACJA</h2>
+            Przede wszystkim chcemy poznać Twoje motywy podjęcia decyzji o
+            rozpoczęciu kursu programowania w Python'ie.
+            <br>
+            <br>
 
             <div class="small-4 columns">
-                <label for="right-label" class="right">Description</label>
+                <label for="right-label" class="right"><h6
+                        class="csmall carrot">Dlaczego chcesz wziąć
+                    udział w warsztatch PyCode Carrots?</h6>
+                    <x class="vcsmall">
+                        Napisz, jaka jest Twoja motywacja (maks 500
+                        znaków).
+                    </x>
+                </label>
             </div>
-            <div class="small-8 columns">
+            <div class="small-8 columns" style="min-height: 7rem">
                 {{ form.description }}
             </div>
 
+
             <div class="small-4 columns">
-                <label for="right-label" class="right">Riddle</label>
+                <label for="right-label" class="right"><h6
+                        class="csmall carrot">Jaką aplikację
+                    chiałbyś/chciałabyś stworzyć?
+                </h6>
+                    <x class="vcsmall">
+                        Napisz, jakie masz pomysły na aplikacji (maks. 200
+                        znaków).
+                    </x>
+                </label>
+            </div>
+            <div class="small-8 columns" style="min-height: 7rem">
+                {{ form.app_idea }}
+            </div>
+
+
+            <h2 class="carrot">DOŚWIADCZENIE</h2>
+
+            Odpowiedzi w tej części formularza nie wpłyną na jego ocenę. Pomogą
+            nam za to lepiej dopasować program warsztatu do wiedzy i
+            umiejętności uczestników.
+            Zaznacz jaka jest Twoja znajomość języków programowania:
+            <br>
+            <br>
+            <table>
+                <thead>
+                <tr>
+                    <th>Język</th>
+                    <th>Nie znam</th>
+                    <th>Początkujący</th>
+                    <th>Średniozawansowany</th>
+                    <th>Zaawansowany</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for expf in form.exp %}
+                    <tr>
+                    <td>{{ expf.label }} </td>
+                    {% for exp in expf %}
+                        <td style="text-align: center">{{ exp }}</td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+            <br>
+            <br>
+
+            <h2 class="carrot">INNE</h2>
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Z jakiego systemu
+                    operacyjnego korzystasz?</label>
             </div>
             <div class="small-8 columns">
-                {{ form.riddle }}
+                {{ form.operating_system }}
             </div>
+
+
             <div class="small-4 columns">
-                <label for="right-label" class="right">Can you cook
-                    something</label>
+                <label for="right-label" class="right">Jaki rozmiar koszulki
+                    nosisz?</label>
+            </div>
+            <div class="small-8 columns">
+                {{ form.tshirt }}
+            </div>
+
+
+            <div class="small-4 columns">
+                <label for="right-label" class="right">Czy możesz przygotować
+                    coś do jedzenia ?</label>
             </div>
             <div class="small-8 columns">
                 {{ form.can_cook_something }}
@@ -78,14 +173,18 @@
 
 
             <div class="small-4 columns">
-                <label for="right-label" class="right">I Accept rules</label>
+                <label for="right-label" class="right">Przeczytałam/em i akcetpuję
+                    <a
+                            onclick="rules_conf()">Regulamin</a></label>
             </div>
-            <div class="small-8 columns">
+            <div class="small-8 columns" style="min-height: 3rem">
                 {{ form.accepted_rules }}
             </div>
 
+
             <div class="small-4 columns">
-                <label for="right-label" class="right">I am a Human</label>
+                <label for="right-label" class="right">Tak jestem człowiekiem
+                    a: <br>{{ form.i_am_human.label }}</label>
             </div>
             <div class="small-8 columns">
                 {{ form.i_am_human }}
@@ -106,4 +205,30 @@
             });
         });
     </script>
+
+    <script>
+        function rules_conf() {
+            swal({
+                title: "Regulamin warsztatów: PyCode Carrots Poznań",
+                html: true,
+                text: '<ol style="font-size: 12px; text-align: left"><li>Organizatorem wydarzenia „PyCode Carrots Poznań” (dalej zwanym Warsztatem) jest GGC Kamila Sidor, zwana dalej Organizatorem. Reprezentowana przez komitet organizacyjny, w skład którego wchodzą... </li>\
+<li>Partnerami warsztatów są: \
+, zwani dalej Partnerami. </li>\
+<li>Strona Internetowa Organizatora to <a href="http://geekgirlscarrots.org/">geekgirlscarrots.org</a>. </li>\
+<li>Warsztat odbywa się w dniach 27-2­9.11.2015 r. na Wydziale Matematyki i Informatyki UAM w Poznaniu, ul. Umultowska 87, 61-614 Poznań. </li>\
+<li>Nauka odbywać się będzie w grupach trzy lub czteroosobowych. Każdej grupie dedykowany jest jeden mentor. </li>\
+<li>Na warsztaty należy przyjść z własnym laptopem. </li>\
+<li>Liczba miejsc jest ograniczona do maksymalnie 45 osób. </li>\
+<li>W wypadku większej liczby zgłoszeń, Uczestnicy zostaną wybrani na podstawie oceny Organizatora. </li>\
+<li>Uczestnikiem Warsztatu jest każda osoba, która prawidłowo wypełnieni formularz rejestracyjny (dalej jako: „Formularz Rejestracyjny”) znajdujący się na stronie internetowej; zaakceptuje niniejszy Regulamin; otrzyma informację o zakwalifikowaniu się na Warsztat i w terminie do 18.11.2015 r. potwierdzi swoje uczestnictwo w Warsztacie. </li>\
+<li>Uczestnik wyraża zgodę na wykorzystywanie zdjęć, danych osobowych i nagrań ze swoim wizerunkiem, powstałych podczas Warsztatów. Będą one powielane w mediach oraz materiałach promocyjnych Organizatora i Partnerów m.in. na stronach internetowych, w social media, jak również poprzez ogólnodostępne środki masowego przekazu (prasa, radio, telewizja, internet).</li>\
+<li>Uczestnik biorący udział w Warsztacie bierze pełną odpowiedzialność prawną i finansową za swoje czyny. </li>\
+<li>Organizator zastrzega sobie prawo do zmian w Regulaminie i programie wydarzenia. Organizator ma obowiązek poinformować Uczestników o wszelkich ewentualnych zmianach w Regulaminie. </li>\
+<li>Warsztaty są bezpłatne dla uczestników. Organizator nie opłaca zakwaterowania, ani żadnych innych potrzeb poza Warsztatami. </li>\
+<li>Uczestnictwo w warsztatach jest równoznaczne z akceptacją regulaminu. </li></ol>'
+
+            });
+        }
+    </script>
+
 {% endblock %}
