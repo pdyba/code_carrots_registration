@@ -99,7 +99,7 @@
                     chiałbyś/chciałabyś stworzyć?
                 </h6>
                     <x class="vcsmall">
-                        Napisz, jakie masz pomysły na aplikacji (maks. 200
+                        Napisz, jakie masz pomysły na aplikacje (maks. 200
                         znaków).
                     </x>
                 </label>
@@ -211,7 +211,8 @@
             swal({
                 title: "Regulamin warsztatów: PyCode Carrots Poznań",
                 html: true,
-                text: '<ol style="font-size: 12px; text-align: left"><li>Organizatorem wydarzenia „PyCode Carrots Poznań” (dalej zwanym Warsztatem) jest GGC Kamila Sidor, zwana dalej Organizatorem. Reprezentowana przez komitet organizacyjny, w skład którego wchodzą... </li>\
+                allowOutsideClick: true,
+                text: '<ol style="font-size: 12px; text-align: left; color: #4d4d4d"><li>Organizatorem wydarzenia „PyCode Carrots Poznań” (dalej zwanym Warsztatem) jest GGC Kamila Sidor, zwana dalej Organizatorem. Reprezentowana przez komitet organizacyjny, w skład którego wchodzą... </li>\
 <li>Partnerami warsztatów są: \
 , zwani dalej Partnerami. </li>\
 <li>Strona Internetowa Organizatora to <a href="http://geekgirlscarrots.org/">geekgirlscarrots.org</a>. </li>\
@@ -229,6 +230,7 @@
 
             });
         }
+    $(document).foundation();
     </script>
 
 {% endblock %}

@@ -79,7 +79,7 @@ class RegisterForm(Form):
     )
     app_idea = TextAreaField(
         "app_idea",
-        validators=[validators.DataRequired('Napisz swój pomysł na appkę.')],
+        validators=[validators.DataRequired('Napisz swój pomysł na aplikację.')],
     )
     accepted_rules = BooleanField(
         "accepted_rules",
