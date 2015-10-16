@@ -69,12 +69,13 @@
                                     class="active" {% endif %}><a
                                         href="{{ url_for('overview') }}">Overview</a>
                                 </li>
-                            {% endif %}
-                        </li>
+
+
                             <li {% if page_id == 'amail' %}
                                 class="active" {% endif %}><a
                                     href="{{ url_for('amail') }}">A-mail</a>
                             </li>
+                        {% endif %}
                         </ul>
                     </section>
                 </nav>

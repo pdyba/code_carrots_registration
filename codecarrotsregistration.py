@@ -5,22 +5,10 @@ from os import path
 from flask import Flask
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, current_user
 from flask.ext.mail import Mail
 from flask.ext.sqlalchemy import SQLAlchemy
-from werkzeug.debug import DebuggedApplication
 from flask.ext.bcrypt import Bcrypt
-
-
-class AdminModelViewWithAuth(ModelView):
-    """
-    ModelView with authentication.
-    """
-    def is_accessible(self):
-        """
-        Return True when user can access Admin.
-        """
-        return not current_user.is_anonymous() and current_user.is_admin()
 
 
 app = Flask(__name__)
@@ -42,6 +30,16 @@ lm.init_app(app)
 bcrypt = Bcrypt()
 
 
+class AdminModelViewWithAuth(ModelView):
+    """
+    ModelView with authentication.
+    """
+    def is_accessible(self):
+        """
+        Return True when user can access Admin.
+        """
+        return not current_user.is_anonymous() and current_user.is_admin()
+
 
 def init_admin():
     """
@@ -49,6 +47,7 @@ def init_admin():
     """
     from models import User
     admin.add_view(AdminModelViewWithAuth(User, db.session))
+    return admin
 
 
 def make_app(debug=False):
@@ -59,13 +58,6 @@ def make_app(debug=False):
     app.static_path = path.join(path.abspath(__file__), 'static')
     mail.init_app(app)
     init_admin()
-    # if debug:
-    #     return DebuggedApplication(app, evalex=True)
-    return app
-
-
-if __name__ == '__main__':
-    app = make_app(debug=True)
     from models import User
     try:
         User.query.first()
@@ -73,7 +65,9 @@ if __name__ == '__main__':
         from init_db import db_start
         db_start()
     from views import *
-    print(app.config["MAIL_SERVER"])
-    print(mail.server)
-    app.run(debug=True)
+    return app
 
+
+if __name__ == '__main__':
+    app = make_app(debug=True)
+    app.run(debug=True)

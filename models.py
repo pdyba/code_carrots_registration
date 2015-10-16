@@ -71,5 +71,5 @@ class Attendee(db.Model):
     reviewed_by = Column(String(500))
     accepted = Column(Boolean, default=False)
     notes = Column(String(5000))
-    ssh_yes = Column(String(500))
-    ssh_no = Column(String(500))
+    ssh_tag = Column(String(500))
+    confirmation = Column(String(10), default='noans')
