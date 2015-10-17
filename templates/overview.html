@@ -17,11 +17,20 @@
     <dd {% if page_id == 'overview_accepted' %}
         class="active" {% endif %}><a
             href="{{ url_for('overview', user_filter='accepted')}}">Accepted</a></dd>
+     <dd {% if page_id == 'overview_confirmed' %}
+        class="active" {% endif %}><a
+            href="{{ url_for('overview', user_filter='confirmed')}}">Confirmed</a></dd>
+
+     <dd {% if page_id == 'overview_unconfirmed' %}
+        class="active" {% endif %}><a
+            href="{{ url_for('overview', user_filter='unconfirmed')}}">Unconfirmed</a></dd>
+
+
+
     <dd {% if page_id == 'overview_all' %}
         class="active" {% endif %}><a
             href="{{ url_for('overview') }}">All</a>
     </dd>
-
 
 
 
@@ -40,6 +49,7 @@
                 <th>Score</th>
                 <th>Accepted</th>
                 <th>Review</th>
+                <th>Confirmation</th>
             </tr>
             </thead>
             <tbody>
@@ -52,6 +62,7 @@
                     <td>
                         <a href="{{ url_for('review', uid=attendee.id) }}">Review</a>
                     </td>
+                    <td>{{ attendee.confirmation }}</td>
 
 
                 </tr>
