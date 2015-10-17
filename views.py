@@ -220,7 +220,7 @@ def amail():
 def confirmation(answer, ctag):
     attendee = Attendee.query.filter(
         Attendee.ssh_tag == ctag
-    )
+    ).first()
     if not attendee:
         flash('You have alredy answered or there is no user with that hash')
     attendee.ssh_tag = ""
