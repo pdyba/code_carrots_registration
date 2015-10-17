@@ -4,39 +4,40 @@
 
 {% block content %}
     <dl class="sub-nav">
-    <dt>Filters</dt>
+        <dt>Filters</dt>
 
-    <dd {% if page_id == 'overview' %}
-        class="active" {% endif %}><a
-            href="{{ url_for('overview', user_filter='notrated') }}">Not rated</a>
-    </dd>
-    <dd {% if page_id == 'overview_top100' %}
-        class="active" {% endif %}><a
-            href="{{ url_for('overview',  user_filter='top100')}}">TOP 100</a>
-    </dd>
-    <dd {% if page_id == 'overview_accepted' %}
-        class="active" {% endif %}><a
-            href="{{ url_for('overview', user_filter='accepted')}}">Accepted</a></dd>
-     <dd {% if page_id == 'overview_confirmed' %}
-        class="active" {% endif %}><a
-            href="{{ url_for('overview', user_filter='confirmed')}}">Confirmed</a></dd>
+        <dd {% if page_id == 'overview' %}
+            class="active" {% endif %}><a
+                href="{{ url_for('overview', user_filter='notrated') }}">Not
+            rated</a>
+        </dd>
+        <dd {% if page_id == 'overview_top100' %}
+            class="active" {% endif %}><a
+                href="{{ url_for('overview',  user_filter='top100') }}">TOP
+            100</a>
+        </dd>
+        <dd {% if page_id == 'overview_accepted' %}
+            class="active" {% endif %}><a
+                href="{{ url_for('overview', user_filter='accepted') }}">Accepted</a>
+        </dd>
+        <dd {% if page_id == 'overview_confirmed' %}
+            class="active" {% endif %}><a
+                href="{{ url_for('overview', user_filter='confirmed') }}">Confirmed</a>
+        </dd>
 
-     <dd {% if page_id == 'overview_unconfirmed' %}
-        class="active" {% endif %}><a
-            href="{{ url_for('overview', user_filter='unconfirmed')}}">Rejected</a></dd>
-
-
-
-    <dd {% if page_id == 'overview_all' %}
-        class="active" {% endif %}><a
-            href="{{ url_for('overview') }}">All</a>
-    </dd>
+        <dd {% if page_id == 'overview_unconfirmed' %}
+            class="active" {% endif %}><a
+                href="{{ url_for('overview', user_filter='unconfirmed') }}">Rejected</a>
+        </dd>
 
 
+        <dd {% if page_id == 'overview_all' %}
+            class="active" {% endif %}><a
+                href="{{ url_for('overview') }}">All</a>
+        </dd>
 
-</dl>
 
-    <div class="large-6 columns">
+    </dl>
 
     <div class="large-6 columns">
         <h3>Overview</h3>
@@ -71,8 +72,76 @@
             </tbody>
         </table>
     </div>
+    {% if current_user.is_poweruser() %}
+    <div class="large-6 columns">
+    <br>
+        <br>
+        Ten guzik powinna widzieć tylko Marta :)
+        Powoduję on kompletnądestrukcję - wysłanie e-maila do wszystkich
+        aktualnie zakceptowanych uczestników.
+        <br>
+        <br>
+        <input onclick="send_conf()" value="SEND CONFIRMATION" class="button right">
+        <br>
+        <br>
+        <br>
+        Wyślij kolejna porcję maili do uczestników którzy doszli po tym jak ktoś zrezygnował.
+        <br>
+        <br>
 
+        <input onclick="send_rest()" value="SEND NEW CONF" class="button right">
     </div>
+        <script>
+            function send_conf() {
+                swal({
+                            title: "Are you sure?",
+                            text: "Marto czy jesteś pewna że chcesz zakończyć rekrutację",
+                            type: "success",
+                            showCancelButton: true,
+                            confirmButtonColor: '#DD6B55',
+                            confirmButtonText: 'TAK !',
+                            cancelButtonText: "Nie jeszcze nie.",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                window.location = "{{ url_for('send_confirmation', state='new') }}";
+                            } else {
+                                swal({
+                                    title: "ok",
+                                    text: "ok",
+                                    timer: 400
+                                });
+                            }
+                        });
+            }
+        function send_rest() {
+                swal({
+                            title: "Are you sure?",
+                            text: "Marto czy chcesz dosłać kolejne potwierdzenia",
+                            type: "success",
+                            showCancelButton: true,
+                            confirmButtonColor: '#DD6B55',
+                            confirmButtonText: 'TAK !',
+                            cancelButtonText: "Nie jeszcze nie.",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                window.location = "{{ url_for('send_confirmation', state='rest') }}";
+                            } else {
+                                swal({
+                                    title: "ok",
+                                    text: "ok",
+                                    timer: 400
+                                });
+                            }
+                        });
+            }
+        </script>
+    {% endif %}
 
 
 {% endblock %}

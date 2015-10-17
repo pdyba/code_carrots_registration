@@ -73,3 +73,19 @@ class Attendee(db.Model):
     notes = Column(String(5000))
     ssh_tag = Column(String(500))
     confirmation = Column(String(10), default='noans')
+
+
+class Settings(db.Model):
+    __tablename__ = 'settings'
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    registration_status = Column(String(20))
+
+
+class MailHistory(db.Model):
+    __tablename__ = 'mailhistory'
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    recivers = Column(String(20))
+    who_send = Column(String(20))
+    subject = Column(String(200))
+    body = Column(String(5000))
+    create_date = Column(DateTime, default=datetime.utcnow)

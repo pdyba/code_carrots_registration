@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <div class="large-10 columns">
+    <div class="large-8 columns">
         <h3>E-mail All</h3>
 
         <form action="" method="post" name="order">
@@ -19,7 +19,8 @@
             {% endfor %}
 
             <div class="small-4 columns">
-                <label for="right-label" class="right">Adresaci (grupa docelowa) </label>
+                <label for="right-label" class="right">Adresaci (grupa
+                    docelowa) </label>
             </div>
             <div class="small-8 columns">
                 {{ form.receivers }}
@@ -42,6 +43,24 @@
 
             <input type="submit" value="send mails" class="button right">
         </form>
+    </div>
+    <div class="large-4 columns">
+        To jest modół do wysłania zbiorczych maili do konkretnej grupy
+        odbiorców:<br>
+        <ol>
+            <li><b>all</b> - do wszystkich zarejestrowanych</li>
+            <li><b>accepted</b> - do wszsytkich zakceptowanych</li>
+            <li><b>unaccepted</b> - do wszsytkich NIE zakceptowanych</li>
+            <li><b>confirmed</b> - do wszsytkich zakceptowanych którzy potwierdzili
+                swoje uczestnictwo
+            </li>
+            <li><b>unconfirmed</b> - do wszsytkich zakceptowanych którzy NIE
+                potwierdzili swoje uczestnictwo
+            </li>
+            <li><b>rejected</b> - do wszsytkich zakceptowanych którzy ODRZUCILI swoje
+                uczestnictwo
+            </li>
+        </ol>
     </div>
 
 {% endblock %}

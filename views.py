@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import json
 import random
 import hashlib
+from sqlalchemy import and_
 
 from codecarrotsregistration import app, db, mail, bcrypt, lm
 
@@ -13,7 +14,7 @@ from flask.ext.login import current_user
 from flask.ext.mail import Message
 from flask.ext.login import login_user
 from forms import RegisterForm, LoginForm, ReviewForm, AMailForm
-from models import Attendee, User
+from models import Attendee, User, Settings, MailHistory
 from wtforms import validators
 
 
@@ -24,6 +25,11 @@ def server_url():
     url = str(request.url_root).rstrip('/')
     return url
 
+
+def is_registration_active():
+    return Settings.query.get(1).registration_status == 'active'
+
+
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -31,6 +37,10 @@ def load_user(id):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if not is_registration_active():
+        import pdb; pdb.set_trace()
+        flash("Rejestracja już się skończyła dziękujemy za zaintersowania!")
+        return redirect('/')
     form = RegisterForm(request.form)
     languages = [
         'Python', 'Ruby', 'C++',
@@ -57,8 +67,8 @@ def register():
         msg = Message(
             'PyCode Carrots Poznań 1. Registration Confirmation',
             recipients=[request.form.get('email')],
-            body="Congrats You successfully registered"
-                 "Good luck !"
+            body="Congrats You successfully registered\n"
+                 "Good luck !\n"
                  "Poznań Carrot Team :D",
         )
         mail.send(msg)
@@ -210,6 +220,13 @@ def amail():
                               body=body,
                               subject=subject)
                 conn.send(msg)
+        new_entry = MailHistory()
+        new_entry.recivers = receivers
+        new_entry.body = body
+        new_entry.subject = subject
+        new_entry.who_send = current_user.username
+        db.session.add(new_entry)
+        db.session.commit()
         flash("You succesfully send {} e-mail to all {} attendees".format(
             count_mails, receivers
         ))
@@ -237,14 +254,21 @@ def confirmation(answer, ctag):
     return render_template('info.html')
 
 
-@app.route('/send_confirmation', methods=['GET'])
+@app.route('/send_confirmation/<string:state>', methods=['GET'])
 @login_required
-def send_confirmation():
+def send_confirmation(state):
     if not current_user.poweruser:
         return redirect('overview')
-    attendees = Attendee.query.filter(
-        Attendee.accepted
-    ).all()
+    if state == 'rest':
+        attendees = Attendee.query.filter(and_(
+            Attendee.accepted,
+            Attendee.confirmation == 'noans'
+        )
+        ).all()
+    else:
+        attendees = Attendee.query.filter(
+            Attendee.accepted
+        ).all()
     count_mails = 0
     with mail.connect() as conn:
         for user in attendees:
@@ -272,8 +296,20 @@ def send_confirmation():
                           body=body,
                           subject=subject)
             conn.send(msg)
+    if state == 'new':
+        settings = Settings.query.get(1)
+        settings.registration_status = 'finished'
     db.session.commit()
     flash("You succesfully send {} e-mail to all accepted attendees".format(
         count_mails
     ))
     return redirect('overview')
+
+
+@app.route('/mailhistory', methods=['GET'])
+@login_required
+def mailhistory():
+    if not current_user.is_admin():
+        redirect('/')
+    history = MailHistory.query.all()
+    return render_template('mailhistory.html', history=history)

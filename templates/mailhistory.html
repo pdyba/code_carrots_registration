@@ -1,0 +1,38 @@
+{% extends "_base.html" %}
+
+{% set page_id = 'mailhistory' %}
+
+{% block content %}
+
+
+    <div class="large-6 columns">
+        <h3>Mail History</h3>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Who</th>
+                <th>Recivers</th>
+                <th>Subject</th>
+                <th>Body</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for hist in history %}
+                <tr>
+                    <td>{{ hist.create_date }}</td>
+                    <td>{{ hist.who_send }}</td>
+                    <td>{{ hist.recivers }}</td>
+                    <td>{{ hist.subject }}</td>
+                    <td>{{ hist.body }}</td>
+
+
+                </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
