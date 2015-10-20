@@ -55,7 +55,7 @@
 
 
             <div class="small-4 columns">
-                <label for="right-label" class="right">Miasto</label>
+                <label for="right-label" class="right">Miasto zamieszkania</label>
             </div>
             <div class="small-8 columns">
                 {{ form.city }}
@@ -117,7 +117,7 @@
             Zaznacz jaka jest Twoja znajomość języków programowania:
             <br>
             <br>
-            <table>
+            <table style="width: 100%;">
                 <thead>
                 <tr>
                     <th>Język</th>
@@ -201,8 +201,17 @@
     <script>
         $(function () {
             $("#birth_date").datepicker({
-                dateFormat: 'yy-mm-dd'
+                dateFormat: 'yy-mm-dd',
+                minDate: '-100Y',
+                maxDate: "-17Y -10M"
             });
+            $("#exp-0-0").prop("checked", true);
+            $("#exp-1-0").prop("checked", true);
+            $("#exp-2-0").prop("checked", true);
+            $("#exp-3-0").prop("checked", true);
+            $("#exp-4-0").prop("checked", true);
+            $("#exp-5-0").prop("checked", true);
+            $("#exp-6-0").prop("checked", true);
         });
     </script>
 
