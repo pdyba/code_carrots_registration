@@ -2,6 +2,9 @@
 # encoding: utf-8
 from __future__ import unicode_literals
 
+from datetime import date
+import random
+
 from wtforms import (
     Form,
     validators,
@@ -16,6 +19,7 @@ from wtforms import (
     FieldList,
     Label,
 )
+from wtforms_html5 import DateRange
 
 
 class MyFieldList(FieldList):
@@ -25,6 +29,7 @@ class MyFieldList(FieldList):
         if name:
             field.name = name
             field.label = Label(name.lower(), name)
+            field.default = ('0', 'Nie znam')
         return field
 
     def append_entry(self, data=None):
@@ -63,7 +68,13 @@ class RegisterForm(Form):
     birth_date = DateField(
         label='birth_date',
         format="%Y-%m-%d",
-        validators=[validators.DataRequired('Podaj swoją datę urodzenia.')],
+        validators=[
+            validators.DataRequired('Podaj swoją datę urodzenia.'),
+            DateRange(
+                min=date(1900, 1, 1),
+                max=date(1997, 12, 30)
+            ),
+        ],
     )
     telephone = StringField(
         'telephone',
@@ -73,13 +84,29 @@ class RegisterForm(Form):
     )
     description = TextAreaField(
         "description",
-        validators=[validators.DataRequired(
-            'Napisz co Cię motywuję do rozpoczęcia przygody z programowaniem'
-        )],
+        validators=[
+            validators.DataRequired(
+                'Napisz co Cię motywuję do rozpoczęcia przygody z programowaniem'
+            ),
+            validators.Length(
+                min=100,
+                max=550,
+                message="""Napisałeś zbyt opis swojej motywacji
+                skróc go do 500 znaków """
+            ),
+        ],
     )
     app_idea = TextAreaField(
         "app_idea",
-        validators=[validators.DataRequired('Napisz swój pomysł na aplikację.')],
+        validators=[
+            validators.DataRequired('Napisz swój pomysł na aplikację.'),
+            validators.Length(
+                min=20,
+                max=250,
+                message="""Napisałeś zbyt długi pomysł na
+                aplikacje - skróc go do 200 znaków """
+            ),
+        ],
     )
     accepted_rules = BooleanField(
         "accepted_rules",
@@ -113,9 +140,8 @@ class RegisterForm(Form):
             ('1', 'Początkujący'),
             ('2', 'Średniozaawansowany'),
             ('3', 'Zaawansowany'),
-        ],
-        default=('0', 'Nie znam'),
-    ))
+        ]),
+    )
 
     tshirt = SelectField(
         'tshirt',
@@ -128,6 +154,10 @@ class RegisterForm(Form):
 
     i_am_human = IntegerField(
         'i_am_human',
+        validators=[validators.AnyOf(
+            [6, 12, 20, 30],
+            message='Podałaś/eś błędny wynik weryfikacji'
+        )]
     )
 
     city = StringField(

@@ -14,6 +14,8 @@
           media="all" rel="stylesheet" type="text/css"/>
     <link href="{{ url_for('static', filename='css/sweet-alert.css') }}"
           media="all" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='css/datepicker.css') }}"
+          media="all" rel="stylesheet" type="text/css"/>
     <link href="{{ url_for('static', filename='css/my_style.css') }}"
           media="all" rel="stylesheet" type="text/css"/>
 
@@ -29,10 +31,9 @@
           type="image/x-icon">
 
 
-    <div id="main">
-        <div class="large-12 columns">
 
-            <ul class="title-area">
+
+            <ul class="title-area" style="padding: 1rem">
 
                 <img src="{{ url_for('static', filename='img/logo.png') }}"
                      alt="Code Carrots Registration" style="width: 18%">
@@ -71,18 +72,24 @@
                                 </li>
 
 
-                            <li {% if page_id == 'amail' %}
-                                class="active" {% endif %}><a
-                                    href="{{ url_for('amail') }}">A-mail</a>
-                            </li>
-                        {% endif %}
+                                <li {% if page_id == 'amail' %}
+                                    class="active" {% endif %}><a
+                                        href="{{ url_for('amail') }}">A-mail</a>
+                                </li>
+                                {% if current_user.is_poweruser %}
+                                <li {% if page_id == 'amail' %}
+                                    class="active" {% endif %}><a
+                                        href="{{ url_for('manage') }}">Manage</a>
+                                </li>
+                            {% endif %}
+                            {% endif %}
                         </ul>
                     </section>
                 </nav>
 
             </ul>
-        </div>
-    </div>
+
+
 
     <div class="large-12 columns">
 

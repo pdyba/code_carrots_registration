@@ -1,0 +1,142 @@
+{% extends "_base.html" %}
+
+{% set page_id = 'manage' %}
+
+{% block content %}
+
+    <div class="large-6 columns">
+        <h3>(od)Blokowanie rejestracji:</h3>
+    <br>
+        <br>
+        Stan rejestracji: <b style="color: {% if state=='AKTYWNA' %}green{% else %}red{% endif %}">{{ state }}</b>
+        <br>
+        <br>
+        Blokuje rejstracje:
+        <br>
+        <br>
+        <input onclick="block_reg()" value="BLOCK REG" class="button right">
+        <br>
+        <br>
+        <br>
+        odblokowuje rejstracje:
+        <br>
+        <br>
+        <input onclick="unblock_reg()" value="UNBLOCK REG" class="button right">
+    </div>
+
+    <div class="large-6 columns">
+        <h3>E-maile:</h3>
+    <br>
+        <br>
+        Wysłanie e-maila do wszystkich aktualnie zakceptowanych uczestników.
+        <br>
+        <br>
+        <input onclick="send_conf()" value="SEND CONFIRMATION" class="button right">
+        <br>
+        <br>
+        <br>
+        Wyślij kolejna porcję maili do uczestników którzy doszli po tym jak ktoś zrezygnował.
+        <br>
+        <br>
+        <input onclick="send_rest()" value="SEND NEW CONF" class="button right">
+    </div>
+        <script>
+            function block_reg() {
+                swal({
+                            title: "Are you sure?",
+                            text: "Czy na pewno chcesz zablokować możliwosć rejestracji ?",
+                            type: "success",
+                            showCancelButton: true,
+                            confirmButtonColor: '#DD6B55',
+                            confirmButtonText: 'TAK !',
+                            cancelButtonText: "Nie jeszcze nie.",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                window.location = "{{ url_for('change_reg_status', state=0) }}";
+                            } else {
+                                swal({
+                                    title: "ok",
+                                    text: "ok",
+                                    timer: 400
+                                });
+                            }
+                        });
+            }
+            function unblock_reg() {
+                swal({
+                            title: "Are you sure?",
+                            text: "Czy na pewno chcesz odblkować możliwosć rejestracji ?",
+                            type: "success",
+                            showCancelButton: true,
+                            confirmButtonColor: '#DD6B55',
+                            confirmButtonText: 'TAK !',
+                            cancelButtonText: "Nie jeszcze nie.",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                window.location = "{{ url_for('change_reg_status', state=1) }}";
+                            } else {
+                                swal({
+                                    title: "ok",
+                                    text: "ok",
+                                    timer: 400
+                                });
+                            }
+                        });
+            }
+            function send_conf() {
+                swal({
+                            title: "Are you sure?",
+                            text: "Czy jesteś pewna że chcesz zakończyć rekrutację",
+                            type: "success",
+                            showCancelButton: true,
+                            confirmButtonColor: '#DD6B55',
+                            confirmButtonText: 'TAK !',
+                            cancelButtonText: "Nie jeszcze nie.",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                window.location = "{{ url_for('send_confirmation', state='new') }}";
+                            } else {
+                                swal({
+                                    title: "ok",
+                                    text: "ok",
+                                    timer: 400
+                                });
+                            }
+                        });
+            }
+        function send_rest() {
+                swal({
+                            title: "Are you sure?",
+                            text: "Czy chcesz dosłać kolejne potwierdzenia",
+                            type: "success",
+                            showCancelButton: true,
+                            confirmButtonColor: '#DD6B55',
+                            confirmButtonText: 'TAK !',
+                            cancelButtonText: "Nie jeszcze nie.",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                window.location = "{{ url_for('send_confirmation', state='rest') }}";
+                            } else {
+                                swal({
+                                    title: "ok",
+                                    text: "ok",
+                                    timer: 400
+                                });
+                            }
+                        });
+            }
+        </script>
+
+{% endblock %}

@@ -39,10 +39,10 @@
 
     </dl>
 
-    <div class="large-6 columns">
+    <div class="large-12 columns">
         <h3>Overview</h3>
 
-        <table>
+        <table style="width: 100%;">
             <thead>
             <tr>
                 <th>Surname</th>
@@ -58,7 +58,7 @@
                 <tr>
                     <td>{{ attendee.surname }}</td>
                     <td>{{ attendee.name }}</td>
-                    <td>{{ attendee.score }}</td>
+                    <td>{{ "{0:0.2f}".format(attendee.score) }}</td>
                     <td>{{ attendee.accepted }}</td>
                     <td>
                         <a href="{{ url_for('review', uid=attendee.id) }}">Review</a>
@@ -72,76 +72,6 @@
             </tbody>
         </table>
     </div>
-    {% if current_user.is_poweruser() %}
-    <div class="large-6 columns">
-    <br>
-        <br>
-        Ten guzik powinna widzieć tylko Marta :)
-        Powoduję on kompletnądestrukcję - wysłanie e-maila do wszystkich
-        aktualnie zakceptowanych uczestników.
-        <br>
-        <br>
-        <input onclick="send_conf()" value="SEND CONFIRMATION" class="button right">
-        <br>
-        <br>
-        <br>
-        Wyślij kolejna porcję maili do uczestników którzy doszli po tym jak ktoś zrezygnował.
-        <br>
-        <br>
-
-        <input onclick="send_rest()" value="SEND NEW CONF" class="button right">
-    </div>
-        <script>
-            function send_conf() {
-                swal({
-                            title: "Are you sure?",
-                            text: "Marto czy jesteś pewna że chcesz zakończyć rekrutację",
-                            type: "success",
-                            showCancelButton: true,
-                            confirmButtonColor: '#DD6B55',
-                            confirmButtonText: 'TAK !',
-                            cancelButtonText: "Nie jeszcze nie.",
-                            closeOnConfirm: false,
-                            closeOnCancel: false
-                        },
-                        function (isConfirm) {
-                            if (isConfirm) {
-                                window.location = "{{ url_for('send_confirmation', state='new') }}";
-                            } else {
-                                swal({
-                                    title: "ok",
-                                    text: "ok",
-                                    timer: 400
-                                });
-                            }
-                        });
-            }
-        function send_rest() {
-                swal({
-                            title: "Are you sure?",
-                            text: "Marto czy chcesz dosłać kolejne potwierdzenia",
-                            type: "success",
-                            showCancelButton: true,
-                            confirmButtonColor: '#DD6B55',
-                            confirmButtonText: 'TAK !',
-                            cancelButtonText: "Nie jeszcze nie.",
-                            closeOnConfirm: false,
-                            closeOnCancel: false
-                        },
-                        function (isConfirm) {
-                            if (isConfirm) {
-                                window.location = "{{ url_for('send_confirmation', state='rest') }}";
-                            } else {
-                                swal({
-                                    title: "ok",
-                                    text: "ok",
-                                    timer: 400
-                                });
-                            }
-                        });
-            }
-        </script>
-    {% endif %}
 
 
 {% endblock %}

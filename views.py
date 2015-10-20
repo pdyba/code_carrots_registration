@@ -9,13 +9,12 @@ from sqlalchemy import and_
 from codecarrotsregistration import app, db, mail, bcrypt, lm
 
 from flask import redirect, render_template, request, flash, url_for
-from flask.ext.login import login_required
+from flask.ext.login import login_required, logout_user
 from flask.ext.login import current_user
 from flask.ext.mail import Message
 from flask.ext.login import login_user
 from forms import RegisterForm, LoginForm, ReviewForm, AMailForm
 from models import Attendee, User, Settings, MailHistory
-from wtforms import validators
 
 
 def server_url():
@@ -24,6 +23,37 @@ def server_url():
     """
     url = str(request.url_root).rstrip('/')
     return url
+
+EMAIL_CONFIRMATION = '''
+Cześć!<br>
+Dziękujemy za rejestrację na warsztaty PyCode Carrots w Poznaniu. Do 15 listopada otrzymasz informację o statusie Twojego zgłoszenia.<br>
+<br>
+Obserwuj nasze <a href='https://www.facebook.com/events/817378328361206/'>wydarzenie na Facebooku</a>!<br>
+<br>
+Pozdrawiamy,<br>
+Carrots Team
+'''
+EMAIL_ACCEPTED = '''
+Cześć!<br>
+Z przyjemnością informujemy, że Twoje zgłoszenie na warsztaty PyCode Carrots w Poznaniu zostało zaakceptowane. Przypominamy, że wydarzenie odbędzie się w dniach 27-29 listopada 2015 r. na Wydziale Matematyki i Informatyki UAM (ul. Umultowska 87).<br>
+<br>
+Żeby wziąć udział w warsztatach musisz kliknąć w link poniżej lub skopiować go i wkleić w pasek przeglądarki (link jest jednorazowego użycia).<br>
+ <br>
+UWAGA TEJ OPERACJI NIE MOŻNA COFNĄĆ !<br>
+<a href="{yes}">{yes}</a><br>
+<br>
+Jeśli jednak nie możesz dotrzeć kliknij proszę lub skopiuj link poniżej:<br>
+<br>
+UWAGA TEJ OPERACJI NIE MOŻNA COFNĄĆ !<br>
+<a href="{no}">{no}</a><br>
+<br>
+Czekamy do środy 18 listopada (godz. 23:59) na potwierdzenie Twojego uczestnictwa w warsztacie. W przypadku braku odpowiedzi - na Twoje miejsce przydzielimy osobę z listy rezerwowej. Jeśli wiesz, że nie możesz skorzystać z warsztatu, również prosimy o informację zwrotną.<br>
+<br>
+Obserwuj nasze <a href='https://www.facebook.com/events/817378328361206/'>wydarzenie na Facebooku</a>!<br>
+<br>
+Pozdrawiamy,<br>
+Carrots Team<br>
+'''
 
 
 def is_registration_active():
@@ -38,7 +68,6 @@ def load_user(id):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if not is_registration_active():
-        import pdb; pdb.set_trace()
         flash("Rejestracja już się skończyła dziękujemy za zaintersowania!")
         return redirect('/')
     form = RegisterForm(request.form)
@@ -47,14 +76,11 @@ def register():
         'Java', 'JavaScript', 'HTML/CSS',
         'Inny',
     ]
+    i = random.randint(2, 5)
+    text = '{} + {} * {} = ?'.format(i, i, i)
+    form.i_am_human.label = text
     for lan in languages:
         form.exp.append_entry(data={'name': lan})
-    i = random.randint(2, 5)
-    if request.method == 'GET':
-        form.i_am_human.label = ('{} + {} * {} = ?'.format(i, i, i))
-        form.i_am_human.validators = [
-            validators.EqualTo(i * i + i, message='Podałaś/eś błędny wynik')
-        ]
     if request.method == 'POST' and form.validate():
         new_attende = Attendee()
         form.populate_obj(new_attende)
@@ -67,9 +93,7 @@ def register():
         msg = Message(
             'PyCode Carrots Poznań 1. Registration Confirmation',
             recipients=[request.form.get('email')],
-            body="Congrats You successfully registered\n"
-                 "Good luck !\n"
-                 "Poznań Carrot Team :D",
+            html=EMAIL_CONFIRMATION
         )
         mail.send(msg)
         flash(
@@ -283,22 +307,15 @@ def send_confirmation(state):
                 url_for('confirmation', answer='no', ctag=thash)
             )
             subject = "Zostałaś wybrana na warsztaty PyCode Carrots w Poznaniu"
-            body = """Gratluajcę !!! \n \n
-                   Zostałaś wybrana na warsztaty PyCode Carrots w Poznaniu! \n\n
-                   Potwierdź proszę swoją decyzję klikając w ten link: \n\n
-                   ! UWAGA ! nie ma możliwości zmiany decyzji więc klikaj w przemyślany sposób:
-                   \n\n{}\n\n
-                   jeśli coś się zmieniło i nie możesz dotrzeć kliknij prosze w ten link:
-                   \n\n{}\n\n
-                   """.format(yes_url, no_url)
             count_mails += 1
-            msg = Message(recipients=[user.email],
-                          body=body,
-                          subject=subject)
+            msg = Message(
+                recipients=[user.email],
+                html=EMAIL_ACCEPTED.format(
+                    **{'yes': yes_url, 'no': no_url}
+                ),
+                subject=subject
+            )
             conn.send(msg)
-    if state == 'new':
-        settings = Settings.query.get(1)
-        settings.registration_status = 'finished'
     db.session.commit()
     flash("You succesfully send {} e-mail to all accepted attendees".format(
         count_mails
@@ -313,3 +330,36 @@ def mailhistory():
         redirect('/')
     history = MailHistory.query.all()
     return render_template('mailhistory.html', history=history)
+
+
+@app.route('/change_reg_status/<int:state>', methods=['GET'])
+@login_required
+def change_reg_status(state):
+    if not current_user.poweruser:
+        return redirect('overview')
+    settings = Settings.query.get(1)
+    if state == 0:
+        settings.registration_status = 'finished'
+        flash('Rejstracja wyłączona!')
+    else:
+        settings.registration_status = "active"
+        flash('Rejstracja włączona!')
+    db.session.commit()
+    return redirect('overview')
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
+
+@app.route('/manage', methods=['GET'])
+@login_required
+def manage():
+    if not current_user.is_poweruser():
+        redirect('/')
+    reg_stat = Settings.query.get(1).registration_status
+    state = 'NIE AKTYWNA' if reg_stat == 'finished' else "AKTYWNA"
+    return render_template('manage.html', state=state)
