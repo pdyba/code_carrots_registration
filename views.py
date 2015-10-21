@@ -91,14 +91,14 @@ def register():
         db.session.add(new_attende)
         db.session.commit()
         msg = Message(
-            'PyCode Carrots Poznań 1. Registration Confirmation',
+            'Potwierdzenie rejestracji na warsztaty PyCode Carrots Poznań',
             recipients=[request.form.get('email')],
             html=EMAIL_CONFIRMATION
         )
         mail.send(msg)
         flash(
-            'Congrats You successfully registered,'
-            'You should receive e-mail confirmation'
+            'Twoja odpowiedź została zapisana. '
+            'Powinieneś dostać potwierdzenie na podany e-mail.'
         )
         return redirect(url_for('register'))
     return render_template('register.html', form=form)
@@ -263,14 +263,16 @@ def confirmation(answer, ctag):
         Attendee.ssh_tag == ctag
     ).first()
     if not attendee:
-        flash('You have alredy answered or there is no user with that hash')
+        flash('Już wykorzystałeś link lub podałeś błędny link')
     attendee.ssh_tag = ""
     if answer == 'yes':
         attendee.confirmation = 'yes'
-        message = "Yey ! Do zobaczenia 27meg Listopada"
+        message = "Yey ! Do zobaczenia 27-meg listopada"
     elif answer == 'no':
         attendee.confirmation = 'no'
-        message = "Dzięki za opodiwedź szkoda że jednak nie możesz dołączyć :("
+        message = '''
+        Dziękujemy za odpowiedź. Szkoda, że jednak nie możesz dołączyć :(
+        '''
     else:
         message = 'Coś poszło nie tak!'
     flash(message)
@@ -289,6 +291,7 @@ def send_confirmation(state):
             Attendee.confirmation == 'noans'
         )
         ).all()
+        EMAIL_ACCEPTED.replace('środy 18 listopada', 'niedzili 22 listopada')
     else:
         attendees = Attendee.query.filter(
             Attendee.accepted

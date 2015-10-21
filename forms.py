@@ -91,8 +91,10 @@ class RegisterForm(Form):
             validators.Length(
                 min=100,
                 max=550,
-                message="""Napisałeś zbyt opis swojej motywacji
-                skróc go do 500 znaków """
+                message="""
+                Wpisałeś nieodpowiednią liczbę znaków. Powinieneś zmieścić
+                się między 100 a 500 znaków.
+                """
             ),
         ],
     )
@@ -103,8 +105,10 @@ class RegisterForm(Form):
             validators.Length(
                 min=20,
                 max=250,
-                message="""Napisałeś zbyt długi pomysł na
-                aplikacje - skróc go do 200 znaków """
+                message="""
+                Wpisałeś nieodpowiednią liczbę znaków. Powinieneś
+                zmieścić się między 50 a 200 znaków.
+                """
             ),
         ],
     )
