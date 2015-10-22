@@ -43,8 +43,15 @@
 
                         {% if current_user and current_user.is_authenticated %}
                             <ul class="right">
+                                <li
+                                        class="right"><a
+                                        href="{{ url_for('logout') }}">Logout</a>
+                                </li>
+
+                            <li class="right divider"></li>
+
                                 <li class="hi_user">
-                                    <a>  {{ current_user.username }} </a>
+                                    <a>  {{ current_user.username[0].upper()+current_user.username[1:] }} </a>
                                 </li>
 
                             </ul>
@@ -66,6 +73,7 @@
                                     href="{{ url_for('register') }}">Rejstracja</a>
                             </li>
                             {% if current_user and current_user.is_authenticated %}
+                                <li class="divider"></li>
                                 <li {% if page_id.startswith('overview') %}
                                     class="active" {% endif %}><a
                                         href="{{ url_for('overview') }}">Overview</a>

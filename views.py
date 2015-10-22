@@ -115,7 +115,9 @@ def login():
                     user.password, request.form['password']
             ):
                 login_user(user)
-                flash('You were logged in. Go Crazy.')
+                flash('Hi {}{} ! You were logged in. Go Crazy.'.format(
+                    user.username[0].upper(), user.username[1:]
+                ))
                 return redirect(url_for('overview'))
             else:
                 flash('Invalid username or password.')
@@ -283,6 +285,7 @@ def confirmation(answer, ctag):
 @app.route('/send_confirmation/<string:state>', methods=['GET'])
 @login_required
 def send_confirmation(state):
+    global EMAIL_ACCEPTED
     if not current_user.poweruser:
         return redirect('overview')
     if state == 'rest':
@@ -291,7 +294,9 @@ def send_confirmation(state):
             Attendee.confirmation == 'noans'
         )
         ).all()
-        EMAIL_ACCEPTED.replace('środy 18 listopada', 'niedzili 22 listopada')
+        EMAIL_ACCEPTED = EMAIL_ACCEPTED.replace(
+            'środy 18 listopada', 'niedzili 22 listopada'
+        )
     else:
         attendees = Attendee.query.filter(
             Attendee.accepted
@@ -309,7 +314,7 @@ def send_confirmation(state):
                 server_url(),
                 url_for('confirmation', answer='no', ctag=thash)
             )
-            subject = "Zostałaś wybrana na warsztaty PyCode Carrots w Poznaniu"
+            subject = "PyCode Carrots Poznań: Wybraliśmy właśnie Ciebie"
             count_mails += 1
             msg = Message(
                 recipients=[user.email],
