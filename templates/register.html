@@ -87,8 +87,9 @@
                         znaków).
                     </x>
                 </label>
+                <z id="description_letters" class="right vcsmall"></z>
             </div>
-            <div class="small-8 columns" style="min-height: 7rem">
+            <div class="small-8 columns" style="min-height: 7rem" onkeyup="countChar(this, 'description_letters', 500)">
                 {{ form.description }}
             </div>
 
@@ -99,12 +100,13 @@
                     chiałbyś/chciałabyś stworzyć?
                 </h6>
                     <x class="vcsmall">
-                        Napisz, jakie masz pomysły na aplikacje (50-200
+                        Napisz, jakie masz pomysły na aplikacje (40-200
                         znaków).
                     </x>
                 </label>
+                <z id="app_idea_letters" class="right vcsmall"></z>
             </div>
-            <div class="small-8 columns" style="min-height: 7rem">
+            <div class="small-8 columns" style="min-height: 7rem" onkeyup="countChar(this, 'app_idea_letters', 200)">
                 {{ form.app_idea }}
             </div>
 
@@ -239,6 +241,20 @@
             });
         }
     $(document).foundation();
+    function countChar(val, field_letters, max_len) {
+
+        var len = val.firstElementChild.value.length,
+                string_val = max_len - len;
+        if (len >= max_len) {
+          $('#'+field_letters).html('Przekroczyłeś o <b style="color: red">' + string_val + '</b> znaków');
+        }
+        else if (len <= (max_len/5)) {
+            $('#'+field_letters).html('Napisałeś za mało zanków: <b style="color: red">' + string_val + '</b>');
+        }
+        else {
+          $('#'+field_letters).html('Pozostało Ci: <b style="color: green">' + string_val + '</b> znaków');
+        }
+      }
     </script>
 
 {% endblock %}

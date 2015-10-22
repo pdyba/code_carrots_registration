@@ -103,7 +103,7 @@ class RegisterForm(Form):
         validators=[
             validators.DataRequired('Napisz swój pomysł na aplikację.'),
             validators.Length(
-                min=20,
+                min=40,
                 max=250,
                 message="""
                 Wpisałeś nieodpowiednią liczbę znaków. Powinieneś
