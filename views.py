@@ -194,7 +194,7 @@ def review(uid):
             attendee.accepted = request.form.get('accepted') == 'y'
         db.session.commit()
         flash('Review saved')
-        return redirect(url_for('overview'))
+        return redirect(url_for('overview', user_filter='notrated'))
     return render_template(
         'review.html',
         form=form,
@@ -371,3 +371,12 @@ def manage():
     reg_stat = Settings.query.get(1).registration_status
     state = 'NIE AKTYWNA' if reg_stat == 'finished' else "AKTYWNA"
     return render_template('manage.html', state=state)
+
+
+@app.route("/statistics")
+@login_required
+def statistics():
+    data = {
+        'count': Attendee.query.count(),
+    }
+    return json.dumps(data)

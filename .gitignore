@@ -58,3 +58,5 @@ docs/_build/
 target/
 
 /init_db.py
+/tmp/test.db
+/tmp

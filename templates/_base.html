@@ -31,72 +31,81 @@
           type="image/x-icon">
 
 
+    <ul class="title-area" style="padding: 1rem">
+
+        <img src="{{ url_for('static', filename='img/logo.png') }}"
+             alt="Code Carrots Registration" style="width: 18%">
+        <nav class="top-bar" data-topbar role="navigation">
+
+            <section class="top-bar-section">
+
+                {% if current_user and current_user.is_authenticated %}
+                    <ul class="right">
+                        <li
+                                class="right"><a
+                                href="{{ url_for('logout') }}">Logout</a>
+                        </li>
+
+                        <li class="right divider"></li>
+
+                        <li class="right hi_user">
+                            <a>  {{ current_user.username[0].upper()+current_user.username[1:] }} </a>
+                        </li>
+
+                           <li class="right divider"></li>
+                    <li class="right"><a>
+                            Attendees: <b id="aten_count"></b></a>
+                        </li>
+                        <script>
+                            $.getJSON('{{ url_for('statistics') }}', function (data) {
+                                console.log(data);
+                                $('#aten_count').text(data['count']);
+                            });
+                        </script>
 
 
-            <ul class="title-area" style="padding: 1rem">
+                    </ul>
+                {% else %}
+                    <ul class="right">
+                        <li
+                                class="right"><a
+                                href="{{ url_for('login') }}">Login</a>
+                        </li>
+                    </ul>
+                {% endif %}
+                <ul class="left">
+                    <li {% if page_id == 'Info' %}
+                        class="active" {% endif %}><a
+                            href="{{ url_for('info') }}">Info</a>
+                    </li>
+                    <li {% if page_id == 'register' %}
+                        class="active" {% endif %}><a
+                            href="{{ url_for('register') }}">Rejstracja</a>
+                    </li>
+                    {% if current_user and current_user.is_authenticated %}
+                        <li class="divider"></li>
+                        <li {% if page_id.startswith('overview') %}
+                            class="active" {% endif %}><a
+                                href="{{ url_for('overview', user_filter='notrated') }}">Overview</a>
+                        </li>
 
-                <img src="{{ url_for('static', filename='img/logo.png') }}"
-                     alt="Code Carrots Registration" style="width: 18%">
-                <nav class="top-bar" data-topbar role="navigation">
 
-                    <section class="top-bar-section">
-
-                        {% if current_user and current_user.is_authenticated %}
-                            <ul class="right">
-                                <li
-                                        class="right"><a
-                                        href="{{ url_for('logout') }}">Logout</a>
-                                </li>
-
-                            <li class="right divider"></li>
-
-                                <li class="hi_user">
-                                    <a>  {{ current_user.username[0].upper()+current_user.username[1:] }} </a>
-                                </li>
-
-                            </ul>
-                        {% else %}
-                            <ul class="right">
-                                <li
-                                        class="right"><a
-                                        href="{{ url_for('login') }}">Login</a>
-                                </li>
-                            </ul>
+                        <li {% if page_id == 'amail' %}
+                            class="active" {% endif %}><a
+                                href="{{ url_for('amail') }}">A-mail</a>
+                        </li>
+                        {% if current_user.is_poweruser %}
+                            <li {% if page_id == 'amail' %}
+                                class="active" {% endif %}><a
+                                    href="{{ url_for('manage') }}">Manage</a>
+                            </li>
                         {% endif %}
-                        <ul class="left">
-                            <li {% if page_id == 'Info' %}
-                                class="active" {% endif %}><a
-                                    href="{{ url_for('info') }}">Info</a>
-                            </li>
-                            <li {% if page_id == 'register' %}
-                                class="active" {% endif %}><a
-                                    href="{{ url_for('register') }}">Rejstracja</a>
-                            </li>
-                            {% if current_user and current_user.is_authenticated %}
-                                <li class="divider"></li>
-                                <li {% if page_id.startswith('overview') %}
-                                    class="active" {% endif %}><a
-                                        href="{{ url_for('overview') }}">Overview</a>
-                                </li>
+                    {% endif %}
+                </ul>
+            </section>
+        </nav>
 
-
-                                <li {% if page_id == 'amail' %}
-                                    class="active" {% endif %}><a
-                                        href="{{ url_for('amail') }}">A-mail</a>
-                                </li>
-                                {% if current_user.is_poweruser %}
-                                <li {% if page_id == 'amail' %}
-                                    class="active" {% endif %}><a
-                                        href="{{ url_for('manage') }}">Manage</a>
-                                </li>
-                            {% endif %}
-                            {% endif %}
-                        </ul>
-                    </section>
-                </nav>
-
-            </ul>
-
+    </ul>
 
 
     <div class="large-12 columns">
