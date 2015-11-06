@@ -54,12 +54,12 @@
 
                            <li class="right divider"></li>
                     <li class="right"><a>
-                            Attendees: <b id="aten_count"></b></a>
+                            Attendees/NotRated: <b id="aten_count"></b>/<b id="aten_count_not" style="color: black;"></b></a>
                         </li>
                         <script>
                             $.getJSON('{{ url_for('statistics') }}', function (data) {
-                                console.log(data);
-                                $('#aten_count').text(data['count']);
+                                $('#aten_count').text(data['all']);
+                                $('#aten_count_not').text(data['notrated']);
                             });
                         </script>
 

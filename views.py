@@ -155,6 +155,10 @@ def overview(user_filter=None):
     else:
         attendees = Attendee.query.all()
         current_page_id = 'overview_all'
+    for attendee in attendees:
+        attendee.reviewed_by = len(json.loads(
+            attendee.reviewed_by if attendee.reviewed_by else "{}"
+        ))
     count = len(attendees)
     return render_template(
         'overview.html',
@@ -377,6 +381,7 @@ def manage():
 @login_required
 def statistics():
     data = {
-        'count': Attendee.query.count(),
+        'all': Attendee.query.count(),
+        'notrated': Attendee.query.filter(Attendee.score == 0).count()
     }
     return json.dumps(data)
