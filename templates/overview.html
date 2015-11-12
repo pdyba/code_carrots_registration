@@ -63,7 +63,7 @@
                     <td>{{ attendee.surname }}</td>
                     <td>{{ attendee.name }}</td>
                     <td>{{ "{0:0.2f}".format(attendee.score) }}</td>
-                    <td><c style="color: {% if attendee.reviewed_by == 0 %}red{% elif attendee.reviewed_by == 1  %}orange{% else %}green{% endif %};">{{ attendee.reviewed_by }}</c></td>
+                    <td><c style="color: {% if attendee.reviewed_by == 0 %}red{% elif attendee.reviewed_by == 1  %}orange{% else %}green{% endif %};">{{ attendee.reviewed_by }}</c> | <c style="color: {% if attendee.reviewed_by_me == "No" %}red{% else %}green{% endif %};">{{ attendee.reviewed_by_me }}</c></td>
                     <td>{{ attendee.accepted }}</td>
                     <td>
                         <a href="{{ url_for('review', uid=attendee.id) }}">Review</a>

@@ -156,9 +156,12 @@ def overview(user_filter=None):
         attendees = Attendee.query.all()
         current_page_id = 'overview_all'
     for attendee in attendees:
-        attendee.reviewed_by = len(json.loads(
+        attendee.reviewed_by = json.loads(
             attendee.reviewed_by if attendee.reviewed_by else "{}"
-        ))
+        )
+        attendee.reviewed_by_me = "Yes" if \
+            current_user.username in attendee.reviewed_by.keys() else "No"
+        attendee.reviewed_by = len(attendee.reviewed_by)
     count = len(attendees)
     return render_template(
         'overview.html',
