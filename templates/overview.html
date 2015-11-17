@@ -48,29 +48,49 @@
                 <th>No</th>
                 <th>Surname</th>
                 <th>Name</th>
-                <th>Score</th>
-                <th>R. count</th>
-                <th>Accepted</th>
-                <th>Review</th>
-                <th>Confirmation</th>
+                {% if page_id == 'overview_confirmed' %}
+                    <th>Data Urodzenia</th>
+                    <th>Gotowanie</th>
+                    <th>Miasto</th>
+                    <th>Tshirt</th>
+                    <th>OS</th>
+                {% else %}
+                    <th>Score</th>
+                    <th>R. count</th>
+                    <th>Accepted</th>
+
+                    <th>Confirmation</th>
+                {% endif %}
+            <th>Review</th>
             </tr>
             </thead>
             <tbody>
-            {%  set no = 0  %}
+            {% set no = 0 %}
             {% for attendee in attendees %}
                 <tr {% if no == 50 %}style="background-color: #007095"{% endif %}>
                     <td>{{ no }}{% set no =  no + 1 %}</td>
                     <td>{{ attendee.surname }}</td>
                     <td>{{ attendee.name }}</td>
-                    <td>{{ "{0:0.2f}".format(attendee.score) }}</td>
-                    <td><c style="color: {% if attendee.reviewed_by == 0 %}red{% elif attendee.reviewed_by == 1  %}orange{% else %}green{% endif %};">{{ attendee.reviewed_by }}</c> | <c style="color: {% if attendee.reviewed_by_me == "No" %}red{% else %}green{% endif %};">{{ attendee.reviewed_by_me }}</c></td>
-                    <td>{{ attendee.accepted }}</td>
-                    <td>
-                        <a href="{{ url_for('review', uid=attendee.id) }}">Review</a>
-                    </td>
-                    <td>{{ attendee.confirmation }}</td>
+                    {% if page_id == 'overview_confirmed' %}
+                        <th>{{ attendee.birth_date }}</th>
+                        <th>{{ attendee.can_cook_something }}</th>
+                        <th>{{ attendee.city }}</th>
+                        <th>{{ attendee.tshirt }}</th>
+                        <th>{{ attendee.operating_system }}</th>
+                    {% else %}
+                        <td>{{ "{0:0.2f}".format(attendee.score) }}</td>
+                        <td>
+                            <c style="color: {% if attendee.reviewed_by == 0 %}red{% elif attendee.reviewed_by == 1 %}orange{% else %}green{% endif %};">{{ attendee.reviewed_by }}</c>
+                            |
+                            <c style="color: {% if attendee.reviewed_by_me == "No" %}red{% else %}green{% endif %};">{{ attendee.reviewed_by_me }}</c>
+                        </td>
+                        <td>{{ attendee.accepted }}</td>
 
-
+                        <td>{{ attendee.confirmation }}</td>
+                    {% endif %}
+                                <td>
+                            <a href="{{ url_for('review', uid=attendee.id) }}">Review</a>
+                        </td>
                 </tr>
 
             {% endfor %}
